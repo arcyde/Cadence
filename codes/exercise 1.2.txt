@@ -1,0 +1,68 @@
+# All approaches listed below considers only unique values, if the values are not unique, we need to replace "break" with "append" in another list the index of all elements found in the enum of the list
+
+# First approach, using python and all possible bult-in methods
+# I'm creating a list with 1000000 elements and checking if my desired value is in the list
+def value_in_list(my_value, my_list):
+    if my_value in my_list:
+        print(f'The value {my_value} is present in this list, index: {my_list.index(my_value)}')
+    else:
+        print(f'The value {my_value} is not in this list')
+        
+list_1 = list(range(1, 1000001))
+print('Approach 1')
+value_in_list(518741, list_1)
+value_in_list(1000001, list_1)
+print()
+
+# Second approach, we can't use the "if value in list", but still using python bult-in methods 
+def binary_search(my_list, desired_value, initial_position = None, final_position = None): 
+    initial_position = 0 if not initial_position else initial_position
+    final_position = len(my_list) - 1 if not final_position else final_position # len(my_list) - 1 since we want the index, that starts in 0
+    found = False
+
+    while initial_position <= final_position and not found:
+        mid_term = (initial_position + final_position) // 2
+        try:
+            if my_list[mid_term] == desired_value: 
+                found = True                     
+                return 'The value {} is present in this list, index: {}'.format(desired_value, mid_term)
+            if my_list[mid_term] > desired_value:
+                final_position = mid_term - 1
+            else:
+                initial_position = mid_term + 1
+        except IndexError: # This line prevents searching out of bonds
+            final_position = mid_term - 1
+      
+    return 'The value {} is not in this list'.format(desired_value)
+    
+
+list_2 = list(range(1, 1000001))
+print('Approach 2')
+print(binary_search(list_2, 54844))
+print(binary_search(list_2, 1000001))
+print()
+
+# Third approach, if we need to implement the logic to be used in any language
+# We don't know anything about the list so we will just increase the range of the search in a quadratic way until the final position is greater than our desired value and then use the binary search to find our number
+def search_element(my_list, value):
+    initial_position = 0
+    final_position = 1
+    
+    while True:
+        try:
+            if my_list[final_position] == value:
+                return final_position
+            if my_list[final_position] > value:
+                break
+            final_position *= 2 # Quadratic is better than increasing 1 by 1
+        except IndexError: # This line prevents searching out of bonds
+            final_position -= 1
+            break 
+    
+    return binary_search(my_list, value, initial_position, final_position) # The binary search is universal in case 2 and 3 since we know the array is sorted
+
+list_3 = list(range(1, 1000001))
+print('Approach 3')
+print(search_element(list_3, 4887))
+print(search_element(list_3, 1000001))
+print()    

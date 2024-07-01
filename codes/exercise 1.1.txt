@@ -1,0 +1,85 @@
+# A linked list is a sequence of nodes, it must have an value and the link for the next node, so I need to create the "Node" class to reference the current and the next node.
+class Node:
+    def __init__ (self, initial_value):
+        self.data = initial_value
+        self.next = None
+
+    # Get the value of the current node
+    def getValue(self):
+        return self.data
+        
+    # Get the value of the next node
+    def getNext(self):
+        return self.next
+        
+    # Set the value of the current node
+    def setValor(self, new_value):
+        self.data = new_value
+        
+    # Set the value of the next node
+    def setNext(self, new_next):
+        self.next = new_next
+
+# I have the node class finished, now I have to create the links of the nodes
+class UnorderedList:
+    def __init__(self):
+        self.head = None # At this moment we don't have the head
+    
+    # The elements of the linked list are inserted in FILO (first in, last out) mode, so, the next item will be the head
+    # In the code shown below I instantiate the node and set his next node as the head of the list
+    def add(self, value):
+        node = Node(value)
+        node.setNext(self.head)
+        self.head = node
+
+    # At this moment I don't have the previous value, so I set the previous variable as None(null) then I set the current value as the head of the list.
+    # The next stage is the itheration through the linked list and get the next value, change the next node of the current node as the previous, set the previous value as the current value and the current value as the next.
+    # The head will be the previous item
+    # i.e.: 12 -> 37 -> X -- Current value 12, next = 37, current.next = null, previous = current (12), current = 37. Started as: 12 -> 37, finished as 37 -> 12
+    # The complexity is O(n) 
+    def reverse(self):
+        previous = None
+        current = self.head
+        while current is not None:
+            next = current.getNext()
+            current.setNext(previous)
+            previous = current
+            current = next
+        self.head = previous
+
+# Here is just a function to print all the nodes of the list, starting and the head, itherating all the nodes and adding "->" between them until it reaches the tail
+def print_linked_list(list):
+    current = list.head
+    while current is not None:
+        print(current.getValue(), end=" -> ")
+        current = current.getNext()
+    print("X")
+        
+# Case 1, the example demonstrated in the activity
+list = UnorderedList()
+list.add(99)
+list.add(37)
+list.add(12)
+
+print_linked_list(list) # Prints the original list 12 -> 37 -> 99 ->
+list.reverse() # Reverses the list
+print_linked_list(list) # Prints the reversed list 99 -> 37 -> 12 -> X
+
+#Case 2, another example
+list2 = UnorderedList()
+list2.add(11)
+list2.add(33)
+list2.add(29)
+list2.add(55)
+list2.add(77)
+list2.add(1)
+list2.add(123)
+list2.add(9)
+list2.add(29)
+list2.add(26)
+list2.add(44)
+list2.add(512)
+
+print_linked_list(list2)
+list2.reverse()
+print_linked_list(list2)
